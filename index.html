@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buttons</title>
+  <style>
+    .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    .green {
+      background-color: green;
+      color: white;
+    }
+    .red {
+      background-color: red;
+      color: white;
+    }
+    .blue {
+      background-color: blue;
+      color: white;
+    }
+    .textbox {
+      display: none;
+      width: 80%;
+      margin: 20px auto;
+      padding: 10px;
+      border: 2px solid black;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <button class="button green" onclick="showTextBox('green', '1111')">Person 1</button>
+  <div id="green-textbox" class="textbox">
+    This is the textbox for Person 1
+  </div>
+
+  <button class="button red" onclick="showTextBox('red', '2222')">Person 2</button>
+  <div id="red-textbox" class="textbox">
+    This is the textbox for Person 2
+  </div>
+
+  <button class="button blue" onclick="showTextBox('blue', '3333')">Person 3</button>
+  <div id="blue-textbox" class="textbox">
+    This is the textbox for Person 3
+  </div>
+
+  <script>
+    function showTextBox(color, password) {
+      var inputPassword = prompt('Please enter the password:');
+      if (inputPassword === password) {
+        var textBoxes = document.querySelectorAll('.textbox');
+        for (var i = 0; i < textBoxes.length; i++) {
+          textBoxes[i].style.display = 'none';
+        }
+        document.getElementById(color + '-textbox').style.display = 'block';
+      } else {
+        alert('Incorrect password. Access denied.');
+      }
+    }
+  </script>
+</body>
+</html>
