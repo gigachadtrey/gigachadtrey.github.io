@@ -26,7 +26,6 @@
       color: white;
     }
     .textbox {
-      display: none;
       width: 80%;
       margin: 20px auto;
       padding: 10px;
@@ -38,21 +37,16 @@
 </head>
 <body>
   <button class="button green" onclick="showTextBox('green', '1111')">Person 1</button>
-  <div id="green-textbox" class="textbox">
-    This is the textbox for Person 1
-  </div>
+  <div id="green-textbox" class="textbox" contenteditable="true"></div>
 
   <button class="button red" onclick="showTextBox('red', '2222')">Person 2</button>
-  <div id="red-textbox" class="textbox">
-    This is the textbox for Person 2
-  </div>
+  <div id="red-textbox" class="textbox" contenteditable="true"></div>
 
   <button class="button blue" onclick="showTextBox('blue', '3333')">Person 3</button>
-  <div id="blue-textbox" class="textbox">
-    This is the textbox for Person 3
-  </div>
+  <div id="blue-textbox" class="textbox" contenteditable="true"></div>
 
   <script>
+    // Function to show the text box and load content from localStorage
     function showTextBox(color, password) {
       var inputPassword = prompt('Please enter the password:');
       if (inputPassword === password) {
@@ -60,11 +54,27 @@
         for (var i = 0; i < textBoxes.length; i++) {
           textBoxes[i].style.display = 'none';
         }
-        document.getElementById(color + '-textbox').style.display = 'block';
+        var textBox = document.getElementById(color + '-textbox');
+        textBox.style.display = 'block';
+        textBox.focus();
+        // Load content from localStorage
+        var content = localStorage.getItem(color + '-content');
+        if (content) {
+          textBox.innerHTML = content;
+        }
       } else {
         alert('Incorrect password. Access denied.');
       }
     }
+
+    // Auto-save function
+    var textBoxes = document.querySelectorAll('.textbox');
+    textBoxes.forEach(function(textBox) {
+      textBox.addEventListener('input', function() {
+        var color = this.id.replace('-textbox', '');
+        localStorage.setItem(color + '-content', this.innerHTML);
+      });
+    });
   </script>
 </body>
 </html>
