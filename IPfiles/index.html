@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub File Viewer</title>
+    <style>
+        body {
+            background-color: #45474a; /* Darker grey background color */
+            padding: 20px; /* Add some padding to improve readability */
+        }
+    </style>
+</head>
+<body>
+    <ul id="file-list"></ul>
+
+    <script>
+        // Function to handle file download
+        function downloadFile(url, fileName) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(new Blob([blob]));
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => console.error('Error downloading file:', error));
+        }
+
+        // Fetch list of files from GitHub repository
+        fetch('https://api.github.com/repos/gigachadtrey/my-interactive-physics-files/contents')
+            .then(response => response.json())
+            .then(data => {
+                const fileListElement = document.getElementById('file-list');
+                data.forEach(file => {
+                    const listItem = document.createElement('li');
+                    const downloadButton = document.createElement('button');
+                    downloadButton.textContent = 'Download';
+                    downloadButton.addEventListener('click', () => {
+                        downloadFile(file.download_url, file.name);
+                    });
+                    listItem.textContent = file.name + ' ';
+                    listItem.appendChild(downloadButton);
+                    fileListElement.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching file list:', error));
+    </script>
+</body>
+</html>
