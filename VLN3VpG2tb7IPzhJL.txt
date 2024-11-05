@@ -1,0 +1,1413 @@
+<html><head><base href="This is a plugin! Add to the end of a websim link ?plugin=@Trey6383/injectify" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --neon-color: #0ff;
+  --bg-color: #1a1a1a;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-color);
+  font-family: 'Arial', sans-serif;
+}
+
+.plugin-button {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background: #2a2a2a;
+  border: 2px solid var(--neon-color);
+  cursor: move;
+  box-shadow: 0 0 10px var(--neon-color),
+              0 0 20px var(--neon-color),
+              0 0 30px var(--neon-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate3d(0, 0, 0);
+}
+
+.plugin-button.expanding {
+  width: 500px;
+  height: 500px;
+  border-radius: 10px;
+  right: 20px;
+  top: 80px;
+}
+
+.plugin-button.shrinking {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 10px;
+}
+
+.plugin-button svg {
+  width: 30px;
+  height: 30px;
+  fill: var(--neon-color);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.plugin-button.expanding svg {
+  opacity: 0;
+}
+
+.console-container {
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  width: 500px;
+  height: 500px;
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid var(--neon-color);
+  border-radius: 10px;
+  box-shadow: 0 0 15px var(--neon-color);
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  resize: both;
+  min-width: 300px;
+  min-height: 400px;
+}
+
+.console-container.visible {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--neon-color);
+  cursor: move;
+}
+
+.console-title {
+  color: var(--neon-color);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.inject-button {
+  margin-right: 10px;
+  background: var(--neon-color);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+}
+
+.edit-object-button {
+  margin-right: 10px;
+  background: var(--neon-color);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+}
+
+.close-button {
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  color: var(--neon-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.close-button:hover {
+  color: #fff;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--neon-color);
+}
+
+.tab {
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.tab.active {
+  background: var(--neon-color);
+  color: black;
+}
+
+.tab-content {
+  display: none;
+  padding: 20px;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.console-output {
+  color: white;
+  font-family: monospace;
+  padding: 10px;
+  height: calc(100% - 50px);
+  overflow-y: auto;
+}
+
+.console-log {
+  margin: 5px 0;
+  padding: 5px;
+  border-bottom: 1px solid #333;
+}
+
+.console-log.error {
+  color: #ff4444;
+}
+
+.console-log.warn {
+  color: #ffaa00;
+}
+
+.console-log.info {
+  color: var(--neon-color);
+}
+
+.console-input-container {
+  display: flex;
+  align-items: center;
+  background: #2a2a2a;
+  padding: 10px;
+  border-top: 1px solid var(--neon-color);
+}
+
+.console-prompt {
+  color: var(--neon-color);
+  margin-right: 8px;
+  font-family: monospace;
+}
+
+.console-input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  font-family: monospace;
+  outline: none;
+}
+
+#htmlEditor {
+  width: 100%;
+  height: calc(100% - 50px);
+  background: #2a2a2a;
+  border: none;
+  color: white;
+  padding: 10px;
+  font-family: monospace;
+  resize: none;
+}
+
+#jsEditor {
+  width: 100%;
+  height: calc(100% - 50px);
+  background: #2a2a2a;
+  border: none;
+  color: white;
+  padding: 10px;
+  font-family: monospace;
+  resize: none;
+}
+
+.apply-button {
+  margin: 10px;
+  padding: 8px 16px;
+  background: var(--neon-color);
+  border: none;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.apply-button:hover {
+  box-shadow: 0 0 10px var(--neon-color);
+}
+
+.resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--neon-color);
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+  border-radius: 50%;
+}
+
+.chat-container {
+  color: white;
+  padding: 15px;
+  height: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-title {
+  color: var(--neon-color);
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  min-height: 200px;
+}
+
+.chat-message {
+  margin-bottom: 8px;
+  padding: 5px;
+}
+
+.message-username {
+  color: var(--neon-color);
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.message-time {
+  color: #666;
+  font-size: 0.8em;
+}
+
+.message-content {
+  word-break: break-word;
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  background: #2a2a2a;
+  border: 1px solid var(--neon-color);
+  border-radius: 5px;
+  padding: 8px;
+  color: white;
+}
+
+.chat-send {
+  background: var(--neon-color);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-send:hover {
+  box-shadow: 0 0 10px var(--neon-color);
+}
+
+.message-timer {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.timer-icon {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid var(--neon-color);
+  border-radius: 10px;
+  padding: 15px;
+  color: white;
+  box-shadow: 0 0 15px var(--neon-color);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  transform: translateY(200%);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification.show {
+  transform: translateY(0);
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--neon-color);
+  padding-bottom: 5px;
+}
+
+.notification-title {
+  font-weight: bold;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: var(--neon-color);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.notification-content {
+  margin-bottom: 5px;
+}
+
+.notification-timer {
+  color: #666;
+  font-size: 0.8em;
+}
+
+.highlight-element {
+  outline: 2px solid var(--neon-color) !important;
+  cursor: pointer !important;
+}
+
+.context-menu {
+  position: fixed;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid var(--neon-color);
+  border-radius: 5px;
+  padding: 5px 0;
+  z-index: 1000;
+  box-shadow: 0 0 10px var(--neon-color);
+}
+
+.context-menu-item {
+  padding: 8px 15px;
+  color: white;
+  cursor: pointer;
+}
+
+.context-menu-item:hover {
+  background: var(--neon-color);
+  color: black;
+}
+
+.code-viewer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid var(--neon-color);
+  border-radius: 10px;
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+}
+
+.code-viewer.visible {
+  display: flex;
+}
+
+.code-viewer-header {
+  padding: 10px;
+  border-bottom: 1px solid var(--neon-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.code-viewer-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow: auto;
+}
+
+.code-viewer textarea {
+  width: 100%;
+  height: 100%;
+  background: #2a2a2a;
+  border: none;
+  color: white;
+  font-family: monospace;
+  resize: none;
+  padding: 10px;
+}
+
+.code-viewer .apply-button {
+  margin-right: 10px;
+  background: var(--neon-color);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+}
+
+.code-viewer .apply-button:hover {
+  box-shadow: 0 0 10px var(--neon-color);
+}
+
+.chat-message.user {
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.chat-message.ai {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.ai-chat-input {
+  flex-grow: 1;
+  background: #2a2a2a;
+  border: 1px solid var(--neon-color);
+  border-radius: 5px;
+  padding: 8px;
+  color: white;
+}
+
+.ai-chat-send {
+  background: var(--neon-color);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ai-chat-send:hover {
+  box-shadow: 0 0 10px var(--neon-color);
+}
+
+.ai-chat-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 768px) {
+  .plugin-button {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .plugin-button svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .console-container {
+    width: 90vw;
+    height: 80vh;
+    right: 5vw;
+    min-width: unset;
+    min-height: unset;
+  }
+  
+  .console-container.visible {
+    top: 10vh;
+  }
+  
+  .console-header {
+    padding: 5px;
+  }
+  
+  .console-title {
+    font-size: 12px;
+  }
+  
+  .inject-button,
+  .edit-object-button,
+  .close-button {
+    padding: 3px 6px;
+    font-size: 12px;
+  }
+  
+  .tab {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  .code-viewer {
+    width: 90vw;
+    height: 80vh;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="plugin-button">
+  <svg viewBox="0 0 24 24">
+    <path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14z"/>
+    <path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h8v2H6z"/>
+    <circle cx="19" cy="19" r="1"/>
+    <circle cx="19" cy="5" r="1"/>
+    <circle cx="5" cy="19" r="1"/>
+    <circle cx="5" cy="5" r="1"/>
+  </svg>
+</div>
+
+<div class="console-container">
+  <div class="console-header">
+    <div class="console-title">HTML Console</div>
+    <button class="inject-button">Inject</button>
+    <button class="edit-object-button">Edit Object</button>
+    <button class="close-button">×</button>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="1">Console</div>
+    <div class="tab" data-tab="2">HTML Injector</div>
+    <div class="tab" data-tab="3">CWOH</div>
+    <div class="tab" data-tab="4">JS Injector</div>
+    <div class="tab" data-tab="5">AI</div>
+  </div>
+  
+  <div class="tab-content active" data-content="1">
+    <div class="console-output"></div>
+    <div class="console-input-container">
+      <span class="console-prompt">></span>
+      <input type="text" class="console-input" placeholder="Enter JavaScript...">
+    </div>
+  </div>
+  
+  <div class="tab-content" data-content="2">
+    <textarea id="htmlEditor" placeholder="Enter your HTML code here..."></textarea>
+    <button class="apply-button">Apply HTML</button>
+  </div>
+
+  <div class="tab-content" data-content="4">
+    <textarea id="jsEditor" placeholder="Enter your JavaScript code here..."></textarea>
+    <button class="apply-button">Apply JavaScript</button>
+  </div>
+
+  <div class="tab-content" data-content="3">
+    <div class="chat-container">
+      <div class="chat-title">Chat With Other Hackers (CWOH)</div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="message-timer" style="display: none; color: #666; margin-bottom: 5px;">
+        <svg class="timer-icon" width="12" height="12" viewBox="0 0 24 24" style="display: inline-block; vertical-align: middle;">
+          <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
+        </svg>
+        <span class="timer-text">Ready to send.</span>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" class="chat-input" placeholder="Type your message..." maxlength="500">
+        <button class="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" data-content="5">
+    <div class="chat-container">
+      <div class="chat-title">AI Assistant</div>
+      <div class="chat-messages" id="aiMessages"></div>
+      <div class="chat-input-container">
+        <input type="text" class="ai-chat-input" placeholder="Ask me anything about coding..." maxlength="500">
+        <button class="ai-chat-send">Ask</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="resize-handle"></div>
+</div>
+
+<div class="notification">
+  <div class="notification-header">
+    <span class="notification-title">Notification</span>
+    <button class="notification-close">×</button>
+  </div>
+  <div class="notification-content">
+    Hackers Menu was Injected Successfully!
+  </div>
+  <div class="notification-timer">Leaving in 10 seconds...</div>
+</div>
+
+<script>
+window.addEventListener('load', () => {
+  const notification = document.querySelector('.notification');
+  const notificationClose = document.querySelector('.notification-close');
+  let notificationTimeout;
+  let countdownInterval;
+
+  function showNotification() {
+    if (!notification) return;
+
+    notification.classList.add('show');
+    let timeLeft = 10;
+
+    const timerElement = notification.querySelector('.notification-timer');
+
+    clearTimeout(notificationTimeout);
+    clearInterval(countdownInterval);
+
+    countdownInterval = setInterval(() => {
+      timeLeft--;
+      if (timerElement) {
+        timerElement.textContent = `Leaving in ${timeLeft} seconds...`;
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        hideNotification();
+      }
+    }, 1000);
+
+    notificationTimeout = setTimeout(hideNotification, 10000);
+  }
+
+  function hideNotification() {
+    if (!notification) return;
+    notification.classList.remove('show');
+    clearInterval(countdownInterval);
+    clearTimeout(notificationTimeout);
+  }
+
+  if (notificationClose) {
+    notificationClose.addEventListener('click', hideNotification);
+  }
+
+  if (window.location.href.includes('@Trey6383/injectify')) {
+    showNotification();
+  }
+});
+</script>
+
+<script>
+let isDragging = false;
+let isResizing = false;
+let currentX;
+let currentY;
+let initialX;
+let initialY;
+let xOffset = 0;
+let yOffset = 0;
+let buttonXOffset = 0;
+let buttonYOffset = 0;
+let canSend = true;
+let messageTimer;
+const messageTimerDisplay = document.querySelector('.message-timer');
+const messageTimerText = document.querySelector('.timer-text');
+
+const pluginButton = document.querySelector('.plugin-button');
+const consoleContainer = document.querySelector('.console-container');
+const closeButton = document.querySelector('.close-button');
+const injectButton = document.querySelector('.inject-button');
+const notification = document.querySelector('.notification');
+const notificationClose = document.querySelector('.notification-close');
+let notificationTimeout;
+let countdownInterval;
+
+const consoleHeader = document.querySelector('.console-header');
+const resizeHandle = document.querySelector('.resize-handle');
+const tabs = document.querySelectorAll('.tab');
+const tabContents = document.querySelectorAll('.tab-content');
+const htmlEditor = document.getElementById('htmlEditor');
+const jsEditor = document.getElementById('jsEditor');
+const applyButton = document.querySelector('.apply-button');
+
+const room = new WebsimSocket();
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Remove active class from all tabs
+    tabs.forEach(t => t.classList.remove('active'));
+    tabContents.forEach(t => t.classList.remove('active'));
+    
+    // Add active class to clicked tab and its content
+    tab.classList.add('active');
+    const tabContent = document.querySelector(`[data-content="${tab.dataset.tab}"]`);
+    if (tabContent) {
+      tabContent.classList.add('active');
+    }
+    
+    // Load messages when switching to chat tab
+    if (tab.getAttribute('data-tab') === '3') {
+      loadMessages();
+    }
+  });
+});
+const chatMessages = document.querySelector('#chatMessages');
+const chatInput = document.querySelector('.chat-input');
+const chatSend = document.querySelector('.chat-send');
+
+function addChatMessage(username, message, timestamp) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'chat-message';
+  messageDiv.innerHTML = `
+    <span class="message-username">${username}</span>
+    <span class="message-time">${new Date(timestamp).toLocaleTimeString()}</span>
+    <div class="message-content">${escapeHtml(message)}</div>
+  `;
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+async function loadMessages() {
+  try {
+    const messages = await room.store.get('messages');
+    if (Array.isArray(messages)) {
+      messages.forEach(msg => {
+        addChatMessage(msg.username, msg.message, msg.timestamp);
+      });
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  } catch (error) {
+    console.error('Error loading messages:', error);
+  }
+}
+
+room.onmessage = (event) => {
+  const data = event.data;
+  if (data.type === 'chat') {
+    addChatMessage(data.username, data.message, data.timestamp);
+  }
+};
+
+function sendMessage() {
+  const message = chatInput.value.trim();
+  
+  if (message && canSend && !chatInput.disabled) {
+    chatInput.disabled = true;
+    
+    const messageData = {
+      type: 'chat',
+      message: message,
+      username: room.party.client.username,
+      timestamp: Date.now()
+    };
+    
+    room.send(messageData);
+    
+    room.store.update({
+      id: 'messages',
+      dependencies: { messageData },
+      updateFunction: (messages) => {
+        if (!Array.isArray(messages)) messages = [];
+        const recentDuplicate = messages.find(m => 
+          m.message === messageData.message && 
+          m.username === messageData.username &&
+          (messageData.timestamp - m.timestamp) < 2000
+        );
+        
+        if (!recentDuplicate) {
+          messages.push(messageData);
+          return messages.slice(-100);
+        }
+        return messages;
+      }
+    });
+    
+    chatInput.value = '';
+    canSend = false;
+    messageTimerDisplay.style.display = 'flex';
+    
+    let timeLeft = 2;
+    messageTimer = setInterval(() => {
+      timeLeft--;
+      messageTimerText.textContent = `0:0${timeLeft}`;
+      
+      if (timeLeft <= 0) {
+        clearInterval(messageTimer);
+        canSend = true;
+        chatInput.disabled = false;
+        messageTimerText.textContent = 'Ready to send.';
+        setTimeout(() => {
+          messageTimerDisplay.style.display = 'none';
+        }, 1000);
+      }
+    }, 1000);
+  }
+}
+
+function showNotification() {
+  notification.classList.add('show');
+  let timeLeft = 10;
+  
+  const timerElement = notification.querySelector('.notification-timer');
+  
+  clearTimeout(notificationTimeout);
+  clearInterval(countdownInterval);
+  
+  countdownInterval = setInterval(() => {
+    timeLeft--;
+    timerElement.textContent = `Leaving in ${timeLeft} seconds...`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(countdownInterval);
+      hideNotification();
+    }
+  }, 1000);
+  
+  notificationTimeout = setTimeout(hideNotification, 10000);
+}
+
+function hideNotification() {
+  notification.classList.remove('show');
+  clearInterval(countdownInterval);
+  clearTimeout(notificationTimeout);
+}
+
+injectButton.addEventListener('click', () => {
+  window.open('https://websim.ai/?plugin=@Trey6383/injectify', '_blank');
+  
+  if (window.location.href.includes('@Trey6383/injectify')) {
+    showNotification();
+  }
+});
+
+const editObjectButton = document.querySelector('.edit-object-button');
+let isEditing = false;
+let selectedElement = null;
+
+editObjectButton.addEventListener('click', () => {
+  isEditing = !isEditing;
+  editObjectButton.style.background = isEditing ? '#ff4444' : 'var(--neon-color)';
+  
+  // Check if mobile
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  
+  if (isEditing) {
+    // On mobile, collapse the menu first
+    if (isMobile) {
+      consoleContainer.classList.remove('visible');
+      pluginButton.classList.add('shrinking');
+      pluginButton.style.opacity = '1';
+      pluginButton.style.pointerEvents = 'auto';
+      
+      setTimeout(() => {
+        pluginButton.classList.remove('expanding');
+        pluginButton.classList.remove('shrinking');
+      }, 500);
+    }
+    
+    setTimeout(() => {
+      document.body.addEventListener('mouseover', handleMouseOver);
+      document.body.addEventListener('mouseout', handleMouseOut);
+      document.body.addEventListener('click', handleClick);
+    }, 500);
+  } else {
+    document.body.removeEventListener('mouseover', handleMouseOver);
+    document.body.removeEventListener('mouseout', handleMouseOut);
+    document.body.removeEventListener('click', handleClick);
+  }
+});
+
+function handleMouseOver(e) {
+  if (!isEditing) return;
+  
+  if (e.target.closest('.plugin-button') || 
+      e.target.closest('.console-container') || 
+      e.target.closest('.notification') ||
+      e.target.closest('.context-menu') ||
+      e.target.closest('.code-viewer')) {
+    return;
+  }
+  
+  selectedElement = e.target;
+  if (!selectedElement.classList.contains('highlight-element')) {
+    selectedElement.classList.add('highlight-element');
+  }
+}
+
+function handleMouseOut(e) {
+  if (!isEditing) return;
+  e.target.classList.remove('highlight-element');
+}
+
+function handleClick(e) {
+  if (!isEditing) return;
+  e.preventDefault();
+  e.stopPropagation();
+
+  createContextMenu(e.clientX, e.clientY, selectedElement);
+  isEditing = false;
+  editObjectButton.style.background = 'var(--neon-color)';
+  document.body.removeEventListener('mouseover', handleMouseOver);
+  document.body.removeEventListener('mouseout', handleMouseOut);
+  document.body.removeEventListener('click', handleClick);
+}
+
+function createContextMenu(x, y, element) {
+  const menu = document.createElement('div');
+  menu.className = 'context-menu';
+  menu.style.left = `${x}px`;
+  menu.style.top = `${y}px`;
+
+  const editText = document.createElement('div');
+  editText.className = 'context-menu-item';
+  editText.textContent = 'Edit Text';
+  editText.onclick = () => {
+    menu.remove();
+    makeEditable(element);
+  };
+
+  const editCode = document.createElement('div');
+  editCode.className = 'context-menu-item';
+  editCode.textContent = 'Edit Code of Selected Object';
+  editCode.onclick = () => {
+    menu.remove();
+    showCodeViewer(element);
+  };
+
+  menu.appendChild(editText);
+  menu.appendChild(editCode);
+  document.body.appendChild(menu);
+
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target)) {
+      menu.remove();
+    }
+  }, { once: true });
+}
+
+function makeEditable(element) {
+  if (element.closest('.plugin-button') || 
+      element.closest('.console-container') || 
+      element.closest('.notification') ||
+      element.closest('.context-menu') ||
+      element.closest('.code-viewer')) {
+    return;
+  }
+
+  element.contentEditable = true;
+  element.focus();
+
+  element.style.outline = '2px dashed var(--neon-color)';
+  element.style.padding = '2px';
+
+  function finishEditing() {
+    element.contentEditable = false;
+    element.removeEventListener('keydown', handleKeys);
+    element.removeEventListener('blur', finishEditing);
+    element.style.outline = '';
+    element.style.padding = '';
+    element.classList.remove('highlight-element'); 
+  }
+
+  function handleKeys(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      finishEditing();
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      finishEditing();
+    }
+  }
+
+  element.addEventListener('keydown', handleKeys);
+  element.addEventListener('blur', finishEditing);
+}
+
+function showCodeViewer(element) {
+  const viewer = document.createElement('div');
+  viewer.className = 'code-viewer';
+  viewer.innerHTML = `
+    <div class="code-viewer-header">
+      <div>Element Code</div>
+      <button class="apply-button">Apply</button> 
+      <button class="close-button">×</button>
+    </div>
+    <div class="code-viewer-content">
+      <textarea spellcheck="false">${element.outerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+    </div>
+  `;
+  
+  document.body.appendChild(viewer);
+  setTimeout(() => viewer.classList.add('visible'), 0);
+
+  const closeBtn = viewer.querySelector('.close-button');
+  const applyBtn = viewer.querySelector('.apply-button');
+  const textarea = viewer.querySelector('textarea');
+
+  applyBtn.onclick = () => {
+    try {
+      element.outerHTML = textarea.value;
+      viewer.classList.remove('visible');
+      setTimeout(() => viewer.remove(), 500);
+      element.classList.remove('highlight-element');
+    } catch(err) {
+      console.error('Error applying code changes:', err);
+    }
+  };
+
+  textarea.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      applyBtn.click();
+    }
+  });
+
+  closeBtn.onclick = () => {
+    viewer.classList.remove('visible');
+    setTimeout(() => viewer.remove(), 500);
+    element.classList.remove('highlight-element');
+  };
+}
+
+notificationClose.addEventListener('click', hideNotification);
+
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    sendMessage();
+  }
+});
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.getAttribute('data-tab') === '3') {
+      loadMessages();
+    }
+  });
+});
+
+applyButton.addEventListener('click', () => {
+  try {
+    const userHtml = htmlEditor.value;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(userHtml, 'text/html');
+    
+    let container = document.getElementById('user-html-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'user-html-container';
+      document.body.appendChild(container);
+    }
+    
+    container.innerHTML = userHtml;
+  } catch (error) {
+    console.error('Error applying HTML:', error);
+  }
+});
+
+const jsApplyButton = document.querySelector('[data-content="4"] .apply-button');
+jsApplyButton.addEventListener('click', () => {
+  try {
+    const userJs = jsEditor.value;
+    const script = document.createElement('script');
+    script.textContent = userJs;
+    document.body.appendChild(script);
+    console.info('JavaScript code applied successfully');
+  } catch (error) {
+    console.error('Error applying JavaScript:', error);
+  }
+});
+
+const aiChatInput = document.querySelector('.ai-chat-input');
+const aiChatSend = document.querySelector('.ai-chat-send');
+const aiMessages = document.querySelector('#aiMessages');
+
+function addAiMessage(role, message) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `chat-message ${role}`;
+  messageDiv.innerHTML = `
+    <div class="message-content">${message}</div>
+  `;
+  aiMessages.appendChild(messageDiv);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+
+async function sendAiMessage() {
+  const message = aiChatInput.value.trim();
+  
+  if (message) {
+    addAiMessage('user', escapeHtml(message));
+    aiChatInput.value = '';
+    aiChatInput.disabled = true;
+    aiChatSend.disabled = true;
+
+    try {
+      const response = await fetch('/api/ai_completion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: `You are an AI assistant that helps modify websites with code. When given a request, provide HTML, CSS, and/or JavaScript code that fulfills the request. Always return the code in the required format.
+
+          <typescript-interface>
+          interface Response {
+            answer: string;
+            code: {
+              html?: string;
+              css?: string;
+              javascript?: string;
+            }
+          }
+          </typescript-interface>
+          <example>
+          {
+            "answer": "I've created a red button with hover effects for you.",
+            "code": {
+              "html": "<button class='ai-button'>Click Me</button>",
+              "css": ".ai-button { background: red; color: white; padding: 10px; }",
+              "javascript": "document.querySelector('.ai-button').onclick = () => alert('Clicked!');"
+            }
+          }
+          </example>`,
+          data: message
+        })
+      });
+
+      const data = await response.json();
+      addAiMessage('ai', data.answer);
+
+      // Apply the generated code
+      if (data.code) {
+        if (data.code.html) {
+          let container = document.getElementById('ai-html-container');
+          if (!container) {
+            container = document.createElement('div');
+            container.id = 'ai-html-container';
+            document.body.appendChild(container);
+          }
+          container.innerHTML = data.code.html;
+        }
+
+        if (data.code.css) {
+          let style = document.getElementById('ai-generated-css');
+          if (!style) {
+            style = document.createElement('style');
+            style.id = 'ai-generated-css';
+            document.head.appendChild(style);
+          }
+          style.textContent = data.code.css;
+        }
+
+        if (data.code.javascript) {
+          const script = document.createElement('script');
+          script.textContent = data.code.javascript;
+          document.body.appendChild(script);
+        }
+
+        addAiMessage('ai', 'Changes have been applied to the page!');
+      }
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      addAiMessage('ai', 'Sorry, I encountered an error. Please try again.');
+    }
+
+    aiChatInput.disabled = false;
+    aiChatSend.disabled = false;
+    aiChatInput.focus();
+  }
+}
+
+aiChatSend.addEventListener('click', sendAiMessage);
+aiChatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    sendAiMessage();
+  }
+});
+
+loadMessages();
+
+const consoleOutput = document.querySelector('.console-output');
+const consoleInput = document.querySelector('.console-input');
+
+const originalConsole = {
+  log: console.log,
+  error: console.error,
+  warn: console.warn,
+  info: console.info
+};
+
+function addConsoleMessage(type, ...args) {
+  const logElement = document.createElement('div');
+  logElement.className = `console-log ${type}`;
+  
+  const formattedArgs = args.map(arg => {
+    if (typeof arg === 'object') {
+      return JSON.stringify(arg, null, 2);
+    }
+    return String(arg);
+  }).join(' ');
+  
+  logElement.textContent = formattedArgs;
+  consoleOutput.appendChild(logElement);
+  consoleOutput.scrollTop = consoleOutput.scrollHeight;
+  
+  originalConsole[type](...args);
+}
+
+console.log = (...args) => addConsoleMessage('log', ...args);
+console.error = (...args) => addConsoleMessage('error', ...args);
+console.warn = (...args) => addConsoleMessage('warn', ...args);
+console.info = (...args) => addConsoleMessage('info', ...args);
+
+consoleInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    const code = consoleInput.value;
+    
+    addConsoleMessage('log', '> ' + code);
+    
+    try {
+      const result = eval(code);
+      if (result !== undefined) {
+        console.log(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    
+    consoleInput.value = '';
+  }
+});
+
+console.info('Console initialized');
+console.log('Type JavaScript commands and press Enter to execute');
+
+pluginButton.addEventListener('mousedown', (e) => {
+  let hasDragged = false;
+  let startX = e.clientX;
+  let startY = e.clientY;
+
+  function handleMouseMove(e) {
+    const deltaX = Math.abs(e.clientX - startX);
+    const deltaY = Math.abs(e.clientY - startY);
+    
+    // If moved more than 5px, consider it a drag
+    if (deltaX > 5 || deltaY > 5) {
+      hasDragged = true;
+      
+      if (!pluginButton.classList.contains('expanding')) {
+        isDragging = true;
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        buttonXOffset = currentX;
+        buttonYOffset = currentY;
+        pluginButton.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
+    }
+  }
+
+  function handleMouseUp() {
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+    
+    if (!hasDragged) {
+      // Handle click - expand the button
+      pluginButton.classList.add('expanding');
+      setTimeout(() => {
+        pluginButton.style.opacity = '0';
+        pluginButton.style.pointerEvents = 'none';
+        consoleContainer.classList.add('visible');
+      }, 500);
+    }
+    
+    isDragging = false;
+  }
+
+  if (!pluginButton.classList.contains('expanding')) {
+    initialX = e.clientX - buttonXOffset;
+    initialY = e.clientY - buttonYOffset;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }
+});
+
+pluginButton.addEventListener('click', (e) => {
+  // Prevent default click behavior to avoid conflicts
+  e.preventDefault();
+});
+
+closeButton.addEventListener('click', () => {
+  consoleContainer.classList.remove('visible');
+  pluginButton.classList.add('shrinking');
+  pluginButton.style.opacity = '1';
+  pluginButton.style.pointerEvents = 'auto';
+  
+  setTimeout(() => {
+    pluginButton.classList.remove('expanding');
+    pluginButton.classList.remove('shrinking');
+  }, 500);
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    e.preventDefault();
+    
+    if (e.target === pluginButton || pluginButton.contains(e.target)) {
+      currentX = e.clientX - initialX;
+      currentY = e.clientY - initialY;
+      buttonXOffset = currentX;
+      buttonYOffset = currentY;
+      pluginButton.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    } else {
+      currentX = e.clientX - initialX;
+      currentY = e.clientY - initialY;
+      xOffset = currentX;
+      yOffset = currentY;
+      consoleContainer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    }
+  }
+  
+  if (isResizing) {
+    e.preventDefault();
+    const width = e.clientX - consoleContainer.getBoundingClientRect().left;
+    const height = e.clientY - consoleContainer.getBoundingClientRect().top;
+    consoleContainer.style.width = `${width}px`;
+    consoleContainer.style.height = `${height}px`;
+  }
+});
+</script>
+
+</body></html>
