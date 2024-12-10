@@ -1,0 +1,1375 @@
+<html><head><base href=""/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Websim with Groq support</title>
+    <meta property="og:title" content="Websim with Groq support">
+    <meta property="og:url" content="https://websim.ai/p/k3kbh9gy9yq5beeyv1td/20">
+    <meta property="og:type" content="website">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="https://i.ibb.co/yFqwr9g/image.png">
+    <meta property="twitter:image" content="https://i.ibb.co/yFqwr9g/image.png">
+    <style>
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-cyrillic-ext-400-normal-Dc4VJyIJ.woff2) format("woff2"),
+                 url(/inter-cyrillic-ext-400-normal-BPnxn4xp.woff) format("woff");
+            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+        }
+
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-cyrillic-400-normal-BLGc9T1a.woff2) format("woff2"),
+                 url(/inter-cyrillic-400-normal-ZzOtrSSW.woff) format("woff");
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
+
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-greek-ext-400-normal-Bput3-QP.woff2) format("woff2"),
+                 url(/inter-greek-ext-400-normal-DCpCPQOf.woff) format("woff");
+            unicode-range: U+1F00-1FFF;
+        }
+
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-greek-400-normal-DxZsaF_h.woff2) format("woff2"),
+                 url(/inter-greek-400-normal-BZzXV7-1.woff) format("woff");
+            unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+        }
+
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-vietnamese-400-normal-DMkecbls.woff2) format("woff2"),
+                 url(/inter-vietnamese-400-normal-BUNmGMP1.woff) format("woff");
+            unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+        }
+
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-latin-ext-400-normal-hnt3BR84.woff2) format("woff2"),
+                 url(/inter-latin-ext-400-normal-C1t-h-pH.woff) format("woff");
+            unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        }
+
+        @font-face {
+            font-family: Inter;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url(/inter-latin-400-normal-BOOGhInR.woff2) format("woff2"),
+                 url(/inter-latin-400-normal-gitzw0hO.woff) format("woff");
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/sonoma_resized.webp');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+            z-index: -1;
+            transform: scale(1.20);
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            cursor: auto;
+        }
+
+        body.dark {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        body.dark .modal-content {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        body.dark .modal-button.secondary {
+            background: #404040;
+            color: #ffffff;
+        }
+
+        body.dark .sidebar {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        body.dark .sidebar-search input {
+            background: #404040;
+            border-color: #555;
+            color: #ffffff;
+        }
+
+        body.dark .history-item {
+            background: #404040;
+        }
+
+        body.dark .history-item:hover {
+            background: #505050;
+        }
+
+        body.dark .model-selection-content {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        body.dark .model-item {
+            background: #404040;
+            border-color: #555;
+            color: #ffffff;
+        }
+
+        body.dark .model-item:hover {
+            background: #505050;
+        }
+
+        body.dark .context-menu {
+            background: #2a2a2a;
+            border-color: #555;
+        }
+
+        body.dark .menu-item {
+            color: #ffffff;
+        }
+
+        body.dark .menu-item:hover {
+            background-color: #404040;
+        }
+
+        #game-container {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .bullet {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        #health-bar {
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            height: 30px;
+            background-color: #333;
+        }
+
+        #health-bar-inner {
+            height: 100%;
+            background-color: green;
+        }
+
+        #player {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: transparent;
+            pointer-events: none;
+        }
+
+        #wave-info {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+        }
+
+        #like-button svg {
+            fill: none;
+            stroke: currentColor;
+        }
+
+        #like-button.liked svg {
+            fill: #f04444;
+            stroke: none;
+        }
+
+        .local-llm-banner {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 2px 6px;
+            background: linear-gradient(270deg, blue, purple, blue);
+            background-size: 600% 600%;
+            animation: gradientAnimation 1s ease infinite;
+            color: white;
+            border-radius: 8px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .spinner svg {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            color: black;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .modal-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-button.primary {
+            background: #4444ff;
+            color: white;
+        }
+
+        .modal-button.secondary {
+            background: #dddddd;
+            color: black;
+        }
+
+        .model-selection-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .model-selection-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: black;
+        }
+
+        .model-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .model-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .model-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .model-item.selected {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .model-category {
+            margin: 20px 0;
+        }
+
+        .model-category h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .context-menu {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            color: black;
+            transition: background-color 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .dark .context-menu {
+            background: #1a1a1a;
+            border-color: #333;
+        }
+
+        .dark .menu-item {
+            color: white;
+        }
+
+        .dark .menu-item:hover {
+            background-color: #2a2a2a;
+        }
+
+        /* Add to existing CSS */
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 100;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .content-shifted {
+            margin-left: 300px;
+            width: calc(100% - 300px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-search {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .sidebar-search button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .sidebar-search button:hover {
+            color: #4444ff;
+        }
+
+        .sidebar-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .history-item {
+            background: #f8f8f8;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .dark .history-item {
+            background: #2a2a2a;
+        }
+
+        .history-item:hover {
+            background: #f0f0f0;
+        }
+
+        .dark .history-item:hover {
+            background: #333;
+        }
+
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+        }
+
+        .source-code-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .source-code-controls button {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: none;
+            background: #4444ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .source-code-controls button:hover {
+            background: #3333cc;
+        }
+
+        .source-code-pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            max-height: 70vh;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .profile-pic {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .feature-box {
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffd700;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://websim.ai/assets/root-Dc1nVis6.css">
+    <link rel="manifest" href="https://websim.ai/manifest.json">
+</head>
+<body data-is-root-theme="true" data-accent-color="indigo" data-gray-color="slate" data-has-background="true" data-panel-background="translucent" data-radius="medium" data-scaling="100%" class="radix-themes">
+    <div data-is-root-theme="false" data-accent-color="indigo" data-gray-color="slate" data-has-background="false" data-panel-background="solid" data-radius="medium" data-scaling="100%" class="radix-themes min-h-full max-h-full h-full flex flex-col bg-transparent">
+        <div class="flex items-stretch lg:p-5 flex-1">
+            <div class="flex-1 flex items-stretch p-3">
+                <div class="@container bg-clip-padding relative flex-1 flex flex-col items-stretch transition-all duration-300 ease-in-out bg-white dark:bg-neutral-950 rounded-lg overflow-hidden" id="browser">
+                    <div id="content-area" class="flex-1 absolute left-0 right-0 bottom-0 top-11">
+                        <iframe id="output-frame" style="width:100%; height:100%; border:none;"></iframe>
+                    </div>
+                    <div class="flex flex-col items-stretch w-full bg-gray-100 dark:bg-neutral-700  rounded-t-lg   transition-all duration-300 ease-in-out">
+                        <div class="px-[6px] flex items-center justify-between h-[44px] gap-2 border-b border-gray-200 dark:border-neutral-50/20 ">
+                            <div class="flex flex-1 items-center justify-start gap-1 ">
+                                <button data-disabled="false" data-accent-color="gray" aria-label="Open Sidebar" title="Open Sidebar" class="rt-reset rt-BaseButton rt-r-size-2 rt-variant-ghost rt-high-contrast rt-IconButton m-0 relative" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.675 6.771H8.87M11.483 4H5.25A2.25 2.25 0 0 0 3 6.25v12a2.25 2.25 0 0 0 2.25 2.25h6.233m0-16.5h7.267A2.25 2.25 0 0 1 21 6.25v12a2.25 2.25 0 0 1-2.25 2.25h-7.267m0-16.5v16.5M5.675 9.432H8.87m-3.195 2.701H8.87"></path>
+                                    </svg>
+                                </button>
+                                <button data-accent-color="gray" data-radius="full" aria-label="Go Back" title="Go Back" class="rt-reset rt-BaseButton rt-r-size-2 rt-variant-ghost rt-high-contrast rt-IconButton m-0 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"></path>
+                                    </svg>
+                                </button>
+                                <button data-accent-color="gray" data-radius="full" aria-label="Regenerate" title="Regenerate" onclick="fakeRefresh();" class="rt-reset rt-BaseButton rt-r-size-2 rt-variant-ghost rt-high-contrast rt-IconButton m-0 relative">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+                                        </svg>
+                                    </div>
+                                </button>
+                                <button data-accent-color="gray" data-radius="full" aria-label="Go Home" title="Home" onclick="showWelcomePage();" class="rt-reset rt-BaseButton rt-r-size-2 rt-variant-ghost rt-high-contrast rt-IconButton m-0 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="flex flex-grow-1 flex-shrink-1 items-center justify-center basis-[800px]">
+                                <div class="flex-grow relative">
+                                    <div class="flex-1 h-8">
+                                        <div class="fixed top-0 left-0 right-0 h-full w-full aria-hidden:hidden" aria-hidden="true"></div>
+                                        <div class="w-full absolute">
+                                            <div class="">
+                                                <div class="flex flex-col relative cursor-default">
+                                                    <div class="flex flex-col [&>*]:flex-none [&*>*:not(:last-child)]:rounded-b-none [&*>*:not(:last-child)]:border-b-0 [&*>*:not(:first-child)]:rounded-t-none">
+                                                        <div class="p-1 w-full border bg-white dark:bg-neutral-800 dark:border-neutral-700 flex flex-col gap-1 rounded-full">
+                                                            <div class="flex gap-2" style="position: relative;">
+                                                                <div class="self-start">
+                                                                    <div class="self-start">
+                                                                        <a class="rt-HoverCardTrigger rounded-full border border-gray-200 overflow-hidden
+                                                                                  dark:border-neutral-700 aria-disabled:opacity-50 block
+                                                                                  focus:outline-none focus:shadow-[0_0_0_2px_white]" 
+                                                                           style="min-width:24px;min-height:24px" 
+                                                                           data-state="closed" 
+                                                                           href="@Trey6383">
+                                                                            <img src="https://lh3.googleusercontent.com/a/ACg8ocL1G21bthCEN3fmfLG3gvQY32bRCI_5GKo0vpLgK5X5iWQGPx1v=s96-c" 
+                                                                                 alt="Trey6383" 
+                                                                                 width="22" 
+                                                                                 height="22"/>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="display:inline-block;position:relative;width:100%;height:0">
+                                                                    <div style="position:absolute;overflow:hidden;top:0;left:0;width:0;height:0">
+                                                                        <div aria-hidden="true" style="width:0;transform:translate(0px, 0px);pointer-events:none;user-select:none;-ms-user-select:none;-webkit-user-select:none;box-sizing:content-box;text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%">
+                                                                            <span style="color:transparent">​</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <textarea id="prompt-input" class="w-full bg-transparent focus:outline-none resize-none" placeholder="What would you like to create? Press enter to confirm." rows="1" autoComplete="off" style="width:100%;max-height:1.5em;background:transparent;margin:0;vertical-align:top"></textarea>
+                                                                </div>
+                                                                <div class="flex gap-1 self-start"></div>
+                                                                <div id="local-llm-banner" class="local-llm-banner">Groq API</div>
+                                                                <div id="spinner" class="spinner" style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                                                                    <svg width="30" height="30" viewBox="0 0 100 100">
+                                                                        <defs>
+                                                                            <linearGradient id="spinner-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                                                <stop offset="0%" style="stop-color: blue;"></stop>
+                                                                                <stop offset="50%" style="stop-color: purple;"></stop>
+                                                                                <stop offset="100%" style="stop-color: blue;"></stop>
+                                                                            </linearGradient>
+                                                                        </defs>
+                                                                        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#spinner-gradient)" stroke-width="10" stroke-linecap="round" stroke-dasharray="282.7 282.7" stroke-dashoffset="70.7"></circle>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hidden"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-1 items-center gap-1 justify-end">
+                                <button id="like-button" class="hover:enabled:bg-gray-200 transition-all duration-300 ease-in-out p-1 rounded-full disabled:opacity-50 disabled:bg-none dark:hover:enabled:bg-neutral-600 disabled:opacity-20 disabled:cursor-default" aria-label="Like" title="Like" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="none" aria-label="Like" class="w-6 h-6 ">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" id="radix-:R6rkkj5:" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="hover:enabled:bg-gray-200 transition-all duration-300 ease-in-out p-1 dark:hover:enabled:bg-neutral-600 rounded-full disabled:opacity-50 disabled:bg-none " aria-label="share" onclick="toggleMenu()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="model-selection" class="model-selection hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:transparent;transition-property:background-color;transition-duration:0.15s;transition-timing-function:ease-out;z-index:-1"></div>
+    <script>
+        let currentWebsiteCode = null;
+        let isHome = true;
+        let menuOpen = false;
+        let sidebarOpen = false;
+        let codeHistory = [];
+        let darkMode = false;
+
+        const likeButton = document.getElementById('like-button');
+        const promptInput = document.getElementById('prompt-input');
+        const spinner = document.getElementById('spinner');
+        const localLLMBanner = document.getElementById('local-llm-banner');
+
+        let groqApiKey = null;
+        let selectedModel = 'mixtral-8x7b-32768'; // Using one of the most capable models
+
+        likeButton.addEventListener('click', function() {
+            this.classList.toggle('liked');
+        });
+
+        promptInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const prompt = promptInput.value.trim();
+                if (prompt) {
+                    sendPromptToLLM(prompt);
+                    promptInput.value = '';
+                }
+            }
+        });
+
+        // Modify the sidebar button to be enabled
+        document.querySelector('[aria-label="Open Sidebar"]').removeAttribute('disabled');
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar') || createSidebar();
+            const contentArea = document.getElementById('content-area');
+            sidebarOpen = !sidebarOpen;
+            
+            if (sidebarOpen) {
+                sidebar.classList.add('open');
+                contentArea.classList.add('content-shifted');
+            } else {
+                sidebar.classList.remove('open');
+                contentArea.classList.remove('content-shifted');
+            }
+        }
+
+        function createSidebar() {
+            const sidebar = document.createElement('div');
+            sidebar.className = 'sidebar';
+            sidebar.innerHTML = `
+                <div class="sidebar-header">
+                    <h3>Workspace</h3>
+                    <button onclick="toggleSidebar()" class="modal-button secondary" style="padding: 4px 8px;">×</button>
+                </div>
+                <div class="sidebar-search">
+                    <input 
+                        type="text" 
+                        id="sidebar-prompt" 
+                        placeholder="Enter a prompt..."
+                        onkeypress="handleSidebarPrompt(event)"
+                    >
+                    <button onclick="submitSidebarPrompt()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="source-code-controls" style="margin-bottom: 20px;">
+                    <button onclick="loadHistoryModal()" class="modal-button primary" style="width: 100%;">Load History</button>
+                </div>
+                <div class="sidebar-sections">
+                    <div class="sidebar-section">
+                        <h3>History</h3>
+                        <div id="history-list"></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(sidebar);
+            return sidebar;
+        }
+
+        function loadHistoryModal() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+            modalOverlay.innerHTML = `
+                <div class="modal-content" style="max-width: 90%; width: 800px;">
+                    <h3>Code History</h3>
+                    <div style="max-height: 70vh; overflow-y: auto;">
+                        ${codeHistory.map((item, index) => `
+                            <div class="history-item" style="margin-bottom: 10px;">
+                                <div style="padding: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <span style="font-weight: 500;">${item.timestamp}</span>
+                                            ${item.prompt ? `<br><span style="color: #666; font-size: 0.9em;">"${item.prompt}"</span>` : ''}
+                                        </div>
+                                        <div>
+                                            <button onclick="loadHistoryItem(${index}); closeModal();" class="modal-button primary" style="padding: 4px 8px;">Load</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="modal-button secondary" onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modalOverlay);
+        }
+
+        function handleSidebarPrompt(event) {
+            if (event.key === 'Enter') {
+                submitSidebarPrompt();
+            }
+        }
+
+        function submitSidebarPrompt() {
+            const sidebarPrompt = document.getElementById('sidebar-prompt');
+            const prompt = sidebarPrompt.value.trim();
+            
+            if (prompt) {
+                sendPromptToLLM(prompt);
+                sidebarPrompt.value = '';
+            }
+        }
+
+        function createApiKeyModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>Enter Groq API Key</h3>
+                    <p>Please enter your Groq API key to continue:</p>
+                    <input type="password" id="api-key-input" placeholder="sk-...">
+                    <div style="margin-top: 10px; text-align: center;">
+                        <button onclick="useDemoKey()" style="background: none; border: none; color: #4444ff; text-decoration: underline; cursor: pointer; padding: 5px;">
+                            Use Trey6383's Key
+                        </button>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="modal-button secondary" onclick="closeModal()">Cancel</button>
+                        <button class="modal-button primary" onclick="submitApiKey()">Submit</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function useDemoKey() {
+            groqApiKey = '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';
+            closeModal();
+            showModelSelection();
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal-overlay');
+            if (modal) modal.remove();
+        }
+
+        function submitApiKey() {
+            const keyInput = document.getElementById('api-key-input');
+            const key = keyInput.value.trim();
+            if (key) {
+                groqApiKey = key;
+                closeModal();
+                showModelSelection();
+            }
+        }
+
+        function showModelSelection() {
+            const models = {
+                recommended: [
+                    { id: 'llama3-8b-8192', developer: 'Meta', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'llama-3.3-70b-specdec', developer: 'Meta', context: '8,192', maxOutput: '-', fileSize: '-' }
+                ],
+                production: [
+                    { id: 'distil-whisper-large-v3-en', developer: 'HuggingFace', context: '-', maxOutput: '-', fileSize: '25 MB' },
+                    { id: 'gemma2-9b-it', developer: 'Google', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'gemma-7b-it', developer: 'Google', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'llama-3.3-70b-versatile', developer: 'Meta', context: '128k', maxOutput: '32,768', fileSize: '-' },
+                    { id: 'llama-3.1-8b-instant', developer: 'Meta', context: '128k', maxOutput: '8,192', fileSize: '-' },
+                    { id: 'llama-guard-3-8b', developer: 'Meta', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'llama3-70b-8192', developer: 'Meta', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'llama3-8b-8192', developer: 'Meta', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'mixtral-8x7b-32768', developer: 'Mistral', context: '32,768', maxOutput: '-', fileSize: '-' },
+                    { id: 'whisper-large-v3', developer: 'OpenAI', context: '-', maxOutput: '-', fileSize: '25 MB' },
+                    { id: 'whisper-large-v3-turbo', developer: 'OpenAI', context: '-', maxOutput: '-', fileSize: '25 MB' }
+                ],
+                preview: [
+                    { id: 'llama3-groq-70b-8192-tool-use-preview', developer: 'Groq', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'llama3-groq-8b-8192-tool-use-preview', developer: 'Groq', context: '8,192', maxOutput: '-', fileSize: '-' },
+                    { id: 'llama-3.2-1b-preview', developer: 'Meta', context: '128k', maxOutput: '8,192', fileSize: '-' },
+                    { id: 'llama-3.2-3b-preview', developer: 'Meta', context: '128k', maxOutput: '8,192', fileSize: '-' }
+                ]
+            };
+
+            const modal = document.createElement('div');
+            modal.className = 'model-selection-modal';
+            modal.innerHTML = `
+                <div class="model-selection-content">
+                    <h2>Select a Model</h2>
+                    
+                    <div class="model-category">
+                        <h3>⭐ Recommended Models</h3>
+                        <div class="model-list">
+                            ${models.recommended.map(model => `
+                                <div class="model-item" onclick="selectModel('${model.id}')" style="border: 2px solid #4444ff;">
+                                    <strong>${model.id}</strong>
+                                    <br>
+                                    Developer: ${model.developer}
+                                    <br>
+                                    Context: ${model.context}
+                                    ${model.maxOutput !== '-' ? `<br>Max Output: ${model.maxOutput}` : ''}
+                                    ${model.fileSize !== '-' ? `<br>File Size: ${model.fileSize}` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="model-category">
+                        <h3>Production Models</h3>
+                        <div class="model-list">
+                            ${models.production.map(model => `
+                                <div class="model-item" onclick="selectModel('${model.id}')">
+                                    <strong>${model.id}</strong>
+                                    <br>
+                                    Developer: ${model.developer}
+                                    <br>
+                                    Context: ${model.context}
+                                    ${model.maxOutput !== '-' ? `<br>Max Output: ${model.maxOutput}` : ''}
+                                    ${model.fileSize !== '-' ? `<br>File Size: ${model.fileSize}` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="model-category">
+                        <h3>Preview Models</h3>
+                        <div class="model-list">
+                            ${models.preview.map(model => `
+                                <div class="model-item" onclick="selectModel('${model.id}')">
+                                    <strong>${model.id}</strong>
+                                    <br>
+                                    Developer: ${model.developer}
+                                    <br>
+                                    Context: ${model.context}
+                                    ${model.maxOutput !== '-' ? `<br>Max Output: ${model.maxOutput}` : ''}
+                                    ${model.fileSize !== '-' ? `<br>File Size: ${model.fileSize}` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function selectModel(modelId) {
+            selectedModel = modelId;
+            localLLMBanner.textContent = `Using: ${modelId}`;
+            const modal = document.querySelector('.model-selection-modal');
+            if (modal) modal.remove();
+        }
+
+        localLLMBanner.addEventListener('click', function() {
+            createApiKeyModal();
+        });
+
+        function sendPromptToLLM(prompt) {
+            if (!groqApiKey) {
+                createApiKeyModal();
+                return;
+            }
+
+            spinner.style.display = 'block';
+            localLLMBanner.style.display = 'none';
+            promptInput.value = '';
+
+            let systemPrompt;
+            let userPrompt;
+            
+            if (!isHome && currentWebsiteCode) {
+                systemPrompt = 'You are an AI assistant. Modify the existing HTML/CSS/JS code based on the user\'s request. Return the complete modified code only, no commentary. Do not split the code into multiple files.';
+                userPrompt = `Here is the current website code:\n\n${currentWebsiteCode}\n\nUser request: ${prompt}\n\nPlease modify this code according to the request and return the complete modified version.`;
+            } else {
+                systemPrompt = 'You are an AI assistant. Only respond with HTML/CSS/JS code and nothing else. Do not split the code into multiple files and all code should be included in one file. No split JS/CSS File.';
+                userPrompt = prompt;
+            }
+
+            fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${groqApiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: selectedModel,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: systemPrompt
+                        },
+                        {
+                            role: 'user',
+                            content: userPrompt
+                        }
+                    ]
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const outputFrame = document.getElementById('output-frame');
+                const frameDoc = outputFrame.contentWindow.document;
+                
+                const response = data.choices[0].message.content;
+                const htmlMatch = response.match(/<html[\s\S]*<\/html>/i);
+                
+                if (htmlMatch) {
+                    currentWebsiteCode = htmlMatch[0];
+                    isHome = false;
+                    addToHistory(currentWebsiteCode, prompt); // Pass the prompt here
+                    
+                    frameDoc.open();
+                    frameDoc.write(currentWebsiteCode);
+                    frameDoc.close();
+                } else {
+                    frameDoc.open();
+                    frameDoc.write('<p>Error: No valid HTML code generated.</p>');
+                    frameDoc.close();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const outputFrame = document.getElementById('output-frame');
+                const frameDoc = outputFrame.contentWindow.document;
+                frameDoc.open();
+                frameDoc.write(`<p>Error: ${error.message}</p>`);
+                frameDoc.close();
+            })
+            .finally(() => {
+                spinner.style.display = 'none';
+                localLLMBanner.style.display = 'block';
+            });
+        }
+
+        function showWelcomePage() {
+            const outputFrame = document.getElementById('output-frame');
+            const frameDoc = outputFrame.contentWindow.document;
+            frameDoc.open();
+            frameDoc.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <title>Welcome</title>
+                    <style>
+                        body {
+                            font-family: Inter, system-ui, -apple-system, sans-serif;
+                            max-width: 800px;
+                            margin: 40px auto;
+                            padding: 20px;
+                            line-height: 1.6;
+                        }
+                        a {
+                            color: #4444ff;
+                            text-decoration: none;
+                        }
+                        a:hover {
+                            text-decoration: underline;
+                        }
+                        .highlight {
+                            background-color: #f0f0f0;
+                            padding: 15px;
+                            border-radius: 8px;
+                            border-left: 4px solid #4444ff;
+                            margin: 20px 0;
+                        }
+                        .profile-section {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            margin-top: 10px;
+                        }
+                        .profile-pic {
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                        }
+                        .feature-box {
+                            background-color: #f8f8f8;
+                            border-radius: 8px;
+                            padding: 15px;
+                            margin: 15px 0;
+                        }
+                        .note {
+                            background-color: #fff3cd;
+                            border-left: 4px solid #ffd700;
+                            padding: 15px;
+                            margin: 15px 0;
+                            border-radius: 4px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Say hello to Groq API!</h1>
+                    
+                    <div class="highlight">
+                        <strong>👉 To get started:</strong> Click the "Groq API" button in the top-right corner to set up your API key.
+                        Haven't got a key yet? You can use the "Use Trey6383's Key" option to try it out!
+                    </div>
+
+                    <div class="feature-box">
+                        <h3>What can this do?</h3>
+                        <p>This is a powerful web development assistant that uses Groq's AI to help you create and modify websites in real-time. Simply type your request in the search bar, and watch as it generates complete, working websites with HTML, CSS, and JavaScript!</p>
+                        
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Generate complete websites from text descriptions</li>
+                            <li>Modify existing code with natural language commands</li>
+                            <li>Access your creation history</li>
+                            <li>View and download source code</li>
+                            <li>Toggle dark mode</li>
+                        </ul>
+                    </div>
+
+                    <div class="note">
+                        <strong>Pro Tips:</strong>
+                        <ul>
+                            <li>Click the three dots (...) menu in the top-right to access source code, download options, and dark mode toggle!</li>
+                            <li>The sidebar button is currently visible but greyed out (Trey is still working on fixing this UI quirk, but it does work - just click it!)</li>
+                            <li>Use the "Load History" button in the sidebar to access your previous creations incase the automatic loader isnt working</li>
+                        </ul>
+                    </div>
+
+                    <p>This is a remix of normaluser4163's project which has local llm support. This remix here, made by Trey6383, has groq api support. Get your groq api key <a href="https://console.groq.com/keys" target="_blank">here</a>.</p>
+                    
+                    <div class="profile-section">
+                        <a href="https://websim.ai/@Trey6383/" target="_blank">Follow Trey6383 here for more projects!</a>
+                        <img src="https://lh3.googleusercontent.com/a/ACg8ocL1G21bthCEN3fmfLG3gvQY32bRCI_5GKo0vpLgK5X5iWQGPx1v=s96-c" alt="Trey6383's Profile" class="profile-pic">
+                    </div>
+                </body>
+                </html>
+            `);
+            frameDoc.close();
+            
+            currentWebsiteCode = null;
+            isHome = true;
+        }
+
+        function addToHistory(code, prompt) {
+            if (!isHome && code) {
+                const timestamp = new Date().toLocaleString();
+                codeHistory.unshift({ code, timestamp, prompt });
+                updateHistoryList();
+            }
+        }
+
+        function updateHistoryList() {
+            const historyList = document.getElementById('history-list');
+            if (!historyList) return;
+            
+            historyList.innerHTML = codeHistory.map((item, index) => `
+                <div class="history-item">
+                    <div style="padding: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 500;">${item.timestamp}</span>
+                                ${item.prompt ? `<br><span style="color: #666; font-size: 0.9em;">"${item.prompt}"</span>` : ''}
+                            </div>
+                            <div>
+                                <button onclick="loadHistoryItem(${index})" class="modal-button secondary" style="padding: 4px 8px; margin-right: 4px;">Load</button>
+                                <button onclick="deleteHistoryItem(${index})" class="modal-button secondary" style="padding: 4px 8px; color: #ff4444;">×</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadHistoryItem(index) {
+            const item = codeHistory[index];
+            currentWebsiteCode = item.code;
+            
+            const outputFrame = document.getElementById('output-frame');
+            const frameDoc = outputFrame.contentWindow.document;
+            frameDoc.open();
+            frameDoc.write(item.code);
+            frameDoc.close();
+        }
+
+        function deleteHistoryItem(index) {
+            codeHistory.splice(index, 1);
+            updateHistoryList();
+        }
+
+        // Add event listener for sidebar button
+        document.querySelector('[aria-label="Open Sidebar"]').addEventListener('click', toggleSidebar);
+
+        // Add new functions for viewing source code, downloading HTML, and copying code
+        function viewSource() {
+            if (!currentWebsiteCode) return;
+            
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+            modalOverlay.innerHTML = `
+                <div class="modal-content" style="max-width: 90%; width: 800px;">
+                    <h3>Source Code</h3>
+                    <div class="source-code-controls">
+                        <button onclick="copySourceCode()">Copy Code</button>
+                        <button onclick="closeModal()">Close</button>
+                    </div>
+                    <pre class="source-code-pre"><code>${escapeHtml(currentWebsiteCode)}</code></pre>
+                </div>
+            `;
+            document.body.appendChild(modalOverlay);
+            toggleMenu(); // Close the menu after opening source view
+        }
+
+        function downloadHTML() {
+            if (!currentWebsiteCode) return;
+            
+            const blob = new Blob([currentWebsiteCode], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'webpage.html';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toggleMenu(); // Close the menu after starting download
+        }
+
+        function copySourceCode() {
+            if (!currentWebsiteCode) return;
+            navigator.clipboard.writeText(currentWebsiteCode)
+                .then(() => alert('Code copied to clipboard!'))
+                .catch(err => console.error('Error copying code:', err));
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Modify the LLM response handling to include history
+        function sendPromptToLLM(prompt) {
+            if (!groqApiKey) {
+                createApiKeyModal();
+                return;
+            }
+
+            spinner.style.display = 'block';
+            localLLMBanner.style.display = 'none';
+            promptInput.value = '';
+
+            let systemPrompt;
+            let userPrompt;
+
+            if (!isHome && currentWebsiteCode) {
+                systemPrompt = 'You are an AI assistant. Modify the existing HTML/CSS/JS code based on the user\'s request. Return the complete modified code only, no commentary. Do not split the code into multiple files.';
+                userPrompt = `Here is the current website code:\n\n${currentWebsiteCode}\n\nUser request: ${prompt}\n\nPlease modify this code according to the request and return the complete modified version.`;
+            } else {
+                systemPrompt = 'You are an AI assistant. Only respond with HTML/CSS/JS code and nothing else. Do not split the code into multiple files and all code should be included in one file. No split JS/CSS File.';
+                userPrompt = prompt;
+            }
+
+            fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${groqApiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: selectedModel,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: systemPrompt
+                        },
+                        {
+                            role: 'user',
+                            content: userPrompt
+                        }
+                    ]
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const outputFrame = document.getElementById('output-frame');
+                const frameDoc = outputFrame.contentWindow.document;
+                
+                const response = data.choices[0].message.content;
+                const htmlMatch = response.match(/<html[\s\S]*<\/html>/i);
+                
+                if (htmlMatch) {
+                    currentWebsiteCode = htmlMatch[0];
+                    isHome = false;
+                    addToHistory(currentWebsiteCode, prompt); // Pass the prompt here
+                    
+                    frameDoc.open();
+                    frameDoc.write(currentWebsiteCode);
+                    frameDoc.close();
+                } else {
+                    frameDoc.open();
+                    frameDoc.write('<p>Error: No valid HTML code generated.</p>');
+                    frameDoc.close();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const outputFrame = document.getElementById('output-frame');
+                const frameDoc = outputFrame.contentWindow.document;
+                frameDoc.open();
+                frameDoc.write(`<p>Error: ${error.message}</p>`);
+                frameDoc.close();
+            })
+            .finally(() => {
+                spinner.style.display = 'none';
+                localLLMBanner.style.display = 'block';
+            });
+        }
+
+        window.addEventListener('load', function() {
+            showWelcomePage();
+        });
+
+        function toggleMenu() {
+            const existingMenu = document.querySelector('.context-menu');
+            if (existingMenu) {
+                existingMenu.remove();
+                menuOpen = false;
+                return;
+            }
+
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.style.position = 'absolute';
+            menu.style.right = '10px';
+            menu.style.top = '50px';
+            menu.innerHTML = `
+                <div class="menu-item" onclick="viewSource()">View Source</div>
+                <div class="menu-item" onclick="downloadHTML()">Download as HTML</div>
+                <div class="menu-item" onclick="toggleDarkMode()">Dark Mode: ${darkMode ? 'On' : 'Off'}</div>
+            `;
+
+            document.body.appendChild(menu);
+            menuOpen = true;
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            applyDarkMode();
+            toggleMenu(); // Close menu after toggling
+        }
+
+        function applyDarkMode() {
+            const outputFrame = document.getElementById('output-frame');
+            const frameDoc = outputFrame.contentWindow.document;
+            
+            // Apply dark mode to main interface
+            if (darkMode) {
+                document.body.classList.add('dark');
+                // If there's current website code, inject dark mode styles
+                if (currentWebsiteCode && !isHome) {
+                    const darkStyles = `
+                        <style>
+                            body { background-color: #1a1a1a !important; color: #ffffff !important; }
+                            a { color: #66b3ff !important; }
+                        </style>
+                    `;
+                    frameDoc.head.innerHTML += darkStyles;
+                }
+            } else {
+                document.body.classList.remove('dark');
+                // Remove dark mode styles from iframe if needed
+                if (currentWebsiteCode && !isHome) {
+                    const darkStyleTag = frameDoc.querySelector('style[data-dark-mode]');
+                    if (darkStyleTag) darkStyleTag.remove();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
